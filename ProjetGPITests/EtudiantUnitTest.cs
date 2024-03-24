@@ -58,6 +58,7 @@ namespace ProjetGPITests
 
             // Assert
             Assert.NotNull(result);
+            Assert.IsType<List<Etudiant>>(result.Model);
             Assert.Equal(etudiants.Length, (result.Model as List<Etudiant>).Count);
 
             // Vérification de la présence du bon nombre d'étudiants dans la base de données
@@ -101,6 +102,40 @@ namespace ProjetGPITests
             Assert.NotNull(etudiantInDatabase);
             Assert.Equal("Doe", etudiantInDatabase.Nom);
             Assert.Equal("John", etudiantInDatabase.Prenom);
+
+            // Suppression des données de la base de données
+            context.Database.EnsureDeleted();
+        }
+
+        [Fact]
+        public async Task DetailsEtudiantTest()
+        {
+            // Arrange
+            var options = new DbContextOptionsBuilder<ProjetGPIDbContext>()
+                .UseInMemoryDatabase(databaseName: "ProjetGPIDB")
+                .Options;
+
+            using var context = new ProjetGPIDbContext(options);
+            var controller = new EtudiantsController(context);
+
+            // Initialisation d'un étudiant
+            Etudiant etudiant = new()
+            {
+                Nom = "Doe",
+                Prenom = "John",
+                Email = "john@example.com",
+                Sexe = "Homme",
+                DateNais = DateTime.Now.AddYears(-25)
+            };
+
+            // Act
+            await controller.Create(etudiant);
+            var result = await controller.Details(etudiant.Id) as ViewResult;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<Etudiant>(result.Model);
+            Assert.Equal(etudiant.Id, (result.Model as Etudiant).Id);
 
             // Suppression des données de la base de données
             context.Database.EnsureDeleted();
