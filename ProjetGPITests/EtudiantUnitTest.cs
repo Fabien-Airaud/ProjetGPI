@@ -7,6 +7,67 @@ namespace ProjetGPITests
 {
     public class EtudiantUnitTest
     {
+        public static IEnumerable<object[]> IndexData =>
+        [
+            [Array.Empty<Etudiant>()],
+            [new Etudiant[] {
+                new()
+                {
+                    Nom = "Doe",
+                    Prenom = "John",
+                    Email = "john@example.com",
+                    Sexe = "Homme",
+                    DateNais = DateTime.Now.AddYears(-25)
+                }
+            }],
+            [new Etudiant[] {
+                new()
+                {
+                    Nom = "Doe",
+                    Prenom = "John",
+                    Email = "john@example.com",
+                    Sexe = "Homme",
+                    DateNais = DateTime.Now.AddYears(-25)
+                },
+                new()
+                {
+                    Nom = "Johnson",
+                    Prenom = "Alice",
+                    Email = "alice@example.com",
+                    Sexe = "Femme",
+                    DateNais = DateTime.Now.AddYears(-23)
+                }
+            }]
+        ];
+
+        [Theory]
+        [MemberData(nameof(IndexData))]
+        public async Task IndexEtudiantTest(Etudiant[] etudiants)
+        {
+            // Arrange
+            var options = new DbContextOptionsBuilder<ProjetGPIDbContext>()
+                .UseInMemoryDatabase(databaseName: "ProjetGPIDB")
+                .Options;
+
+            using var context = new ProjetGPIDbContext(options);
+            var controller = new EtudiantsController(context);
+
+            // Act
+            foreach (Etudiant etudiant in etudiants) await controller.Create(etudiant) ; // Ajout des étudiants
+            var result = await controller.Index() as ViewResult;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(etudiants.Length, (result.Model as List<Etudiant>).Count);
+
+            // Vérification de la présence du bon nombre d'étudiants dans la base de données
+            var etudiantsInDatabase = await context.Etudiants.ToListAsync();
+            Assert.Equal(etudiants.Length, etudiantsInDatabase.Count);
+
+            // Suppression des données de la base de données
+            context.Database.EnsureDeleted();
+        }
+
         [Fact]
         public async Task CreateEtudiantTest()
         {
@@ -40,6 +101,9 @@ namespace ProjetGPITests
             Assert.NotNull(etudiantInDatabase);
             Assert.Equal("Doe", etudiantInDatabase.Nom);
             Assert.Equal("John", etudiantInDatabase.Prenom);
+
+            // Suppression des données de la base de données
+            context.Database.EnsureDeleted();
         }
 
         [Fact]
@@ -88,6 +152,9 @@ namespace ProjetGPITests
             // Vérification de la suppression de l'étudiant de la base de données
             var etudiantInDatabase = await context.Etudiants.FirstOrDefaultAsync(e => e.Id == etudiantId);
             Assert.Null(etudiantInDatabase);
+
+            // Suppression des données de la base de données
+            context.Database.EnsureDeleted();
         }
     }
 }
