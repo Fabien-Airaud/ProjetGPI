@@ -46,7 +46,7 @@ namespace ProjetGPITests
         {
             // Arrange
             var options = new DbContextOptionsBuilder<ProjetGPIDbContext>()
-                .UseInMemoryDatabase(databaseName: "ProjetGPIDB")
+                .UseInMemoryDatabase(databaseName: "ProjetGPIDBIndex")
                 .Options;
 
             using var context = new ProjetGPIDbContext(options);
@@ -74,7 +74,7 @@ namespace ProjetGPITests
         {
             // Arrange
             var options = new DbContextOptionsBuilder<ProjetGPIDbContext>()
-                .UseInMemoryDatabase(databaseName: "ProjetGPIDB")
+                .UseInMemoryDatabase(databaseName: "ProjetGPIDBCreate")
                 .Options;
 
             using var context = new ProjetGPIDbContext(options);
@@ -112,7 +112,7 @@ namespace ProjetGPITests
         {
             // Arrange
             var options = new DbContextOptionsBuilder<ProjetGPIDbContext>()
-                .UseInMemoryDatabase(databaseName: "ProjetGPIDB")
+                .UseInMemoryDatabase(databaseName: "ProjetGPIDBDetails")
                 .Options;
 
             using var context = new ProjetGPIDbContext(options);
@@ -142,11 +142,54 @@ namespace ProjetGPITests
         }
 
         [Fact]
+        public async Task EditEtudiantTest()
+        {
+            // Arrange
+            var options = new DbContextOptionsBuilder<ProjetGPIDbContext>()
+                .UseInMemoryDatabase(databaseName: "ProjetGPIDBEdit")
+                .Options;
+
+            using var context = new ProjetGPIDbContext(options);
+            var controller = new EtudiantsController(context);
+
+            // Initialisation d'un étudiant
+            Etudiant etudiant = new()
+            {
+                Nom = "Doe",
+                Prenom = "John",
+                Email = "john@example.com",
+                Sexe = "Homme",
+                DateNais = DateTime.Now.AddYears(-25)
+            };
+
+            // Ajout de l'étudiant dans la base de données
+            await controller.Create(etudiant);
+
+            // Act
+            etudiant.Prenom = "Jane";
+            var result = await controller.Edit(etudiant.Id, etudiant) as RedirectToActionResult;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal("Index", result.ActionName);
+
+            // Vérification de la modification de l'étudiant dans la base de données
+            var etudiantInDatabase = await context.Etudiants.FirstOrDefaultAsync();
+            Assert.NotNull(etudiantInDatabase);
+            Assert.Equal(etudiant.Id, etudiantInDatabase.Id);
+            Assert.Equal("Doe", etudiantInDatabase.Nom);
+            Assert.Equal("Jane", etudiantInDatabase.Prenom);
+
+            // Suppression des données de la base de données
+            context.Database.EnsureDeleted();
+        }
+
+        [Fact]
         public async Task DeleteEtudiantTest()
         {
             // Arrange
             var options = new DbContextOptionsBuilder<ProjetGPIDbContext>()
-                .UseInMemoryDatabase(databaseName: "ProjetGPIDB")
+                .UseInMemoryDatabase(databaseName: "ProjetGPIDBDelete")
                 .Options;
 
             using var context = new ProjetGPIDbContext(options);
