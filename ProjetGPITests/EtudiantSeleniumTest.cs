@@ -6,6 +6,10 @@ namespace ProjetGPITests
 {
     public class EtudiantSeleniumTest
     {
+        private static readonly string indexUrl = "https://localhost:7212/";
+        private static readonly string[] indexTableHeaders = ["Nom", "Prénom", "Email", "Sexe", "Date de Naissance", ""];
+
+
         private static void HeaderBrandTest(IWebDriver driver)
         {
             // Act
@@ -15,12 +19,32 @@ namespace ProjetGPITests
             Assert.Equal("ProjetGPIApp", navbarBrand.Text);
         }
 
+        private static void IndexTableDataRowTest(ReadOnlyCollection<IWebElement> rowCells)
+        {
+            // Check Etudiant data
+            Assert.Equal(indexTableHeaders.Length, rowCells.Count);
+            for (int i = 0; i < rowCells.Count - 1; i++)
+            {
+                Assert.True(rowCells[i].Text.Length > 0);
+            }
+
+            // Check row action buttons
+            ReadOnlyCollection<IWebElement> rowButtons = rowCells[^1].FindElements(By.CssSelector("a"));
+            Assert.Equal(3, rowButtons.Count);
+            Assert.Equal("Editer", rowButtons[0].Text);
+            Assert.StartsWith(indexUrl + "Etudiants/Edit/", rowButtons[0].GetAttribute("href"));
+            Assert.Equal("Détails", rowButtons[1].Text);
+            Assert.StartsWith(indexUrl + "Etudiants/Details/", rowButtons[1].GetAttribute("href"));
+            Assert.Equal("Supprimer", rowButtons[2].Text);
+            Assert.StartsWith(indexUrl + "Etudiants/Delete/", rowButtons[2].GetAttribute("href"));
+        }
+
         [Fact]
         public void IndexEtudiantTest()
         {
             // Arrange
             var chromeDriver = new ChromeDriver();
-            chromeDriver.Navigate().GoToUrl("https://localhost:7212/");
+            chromeDriver.Navigate().GoToUrl(indexUrl);
 
             // Check the header brand
             HeaderBrandTest(chromeDriver);
@@ -31,33 +55,22 @@ namespace ProjetGPITests
 
             // Get table rows
             ReadOnlyCollection<IWebElement> tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
-            string[] tableHeaders = ["Nom", "Prénom", "Email", "Sexe", "Date de Naissance", ""];
 
             // Check table headers
             IWebElement tableHeaderRow = tableRows[0];
             ReadOnlyCollection<IWebElement> tableHeaderCells = tableHeaderRow.FindElements(By.CssSelector("th"));
-            Assert.Equal(tableHeaders.Length, tableHeaderCells.Count);
-            for (int i = 0; i < tableHeaders.Length; i++)
+            Assert.Equal(indexTableHeaders.Length, tableHeaderCells.Count);
+            for (int i = 0; i < indexTableHeaders.Length; i++)
             {
-                Assert.Equal(tableHeaders[i], tableHeaderCells[i].Text);
+                Assert.Equal(indexTableHeaders[i], tableHeaderCells[i].Text);
             }
 
             // Check table data
-            ReadOnlyCollection<IWebElement> firstTableDataCells = tableRows[1].FindElements(By.CssSelector("td"));
-            Assert.Equal(tableHeaders.Length, firstTableDataCells.Count);
-            for (int i = 0; i < firstTableDataCells.Count - 1; i++)
+            for (int i = 1; i < tableRows.Count; i++)
             {
-                Assert.True(firstTableDataCells[i].Text.Length > 0);
+                ReadOnlyCollection<IWebElement> rowCells = tableRows[i].FindElements(By.CssSelector("td"));
+                IndexTableDataRowTest(rowCells);
             }
-
-            ReadOnlyCollection<IWebElement> rowButtons = firstTableDataCells[^1].FindElements(By.CssSelector("a"));
-            Assert.Equal(3, rowButtons.Count);
-            Assert.Equal("Editer", rowButtons[0].Text);
-            Assert.StartsWith("https://localhost:7212/Etudiants/Edit/", rowButtons[0].GetAttribute("href"));
-            Assert.Equal("Détails", rowButtons[1].Text);
-            Assert.StartsWith("https://localhost:7212/Etudiants/Details/", rowButtons[1].GetAttribute("href"));
-            Assert.Equal("Supprimer", rowButtons[2].Text);
-            Assert.StartsWith("https://localhost:7212/Etudiants/Delete/", rowButtons[2].GetAttribute("href"));
 
             // Cleanup
             chromeDriver.Quit();
