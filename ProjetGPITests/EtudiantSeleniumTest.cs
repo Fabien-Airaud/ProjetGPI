@@ -24,6 +24,10 @@ namespace ProjetGPITests
             // Check the header brand
             HeaderBrandTest(chromeDriver);
 
+            // Check create button
+            var createButton = chromeDriver.FindElement(By.CssSelector("a[href=\"Etudiants/Create\"]"));
+            Assert.Equal("Nouvel étudiant", createButton.Text);
+
             // Cleanup
             chromeDriver.Quit();
         }
