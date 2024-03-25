@@ -6,7 +6,7 @@ namespace ProjetGPITests
 {
     public class EtudiantSeleniumTest
     {
-        static void HeaderBrandTest(IWebDriver driver)
+        private static void HeaderBrandTest(IWebDriver driver)
         {
             // Act
             IWebElement navbarBrand = driver.FindElement(By.CssSelector("header nav p.navbar-brand"));
@@ -31,15 +31,23 @@ namespace ProjetGPITests
 
             // Get table rows
             ReadOnlyCollection<IWebElement> tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
+            string[] tableHeaders = ["Nom", "Prénom", "Email", "Sexe", "Date de Naissance", ""];
 
             // Check table headers
-            string[] tableHeaders = ["Nom", "Prénom", "Email", "Sexe", "Date de Naissance", ""];
             IWebElement tableHeaderRow = tableRows[0];
             ReadOnlyCollection<IWebElement> tableHeaderCells = tableHeaderRow.FindElements(By.CssSelector("th"));
             Assert.Equal(tableHeaders.Length, tableHeaderCells.Count);
             for (int i = 0; i < tableHeaders.Length; i++)
             {
                 Assert.Equal(tableHeaders[i], tableHeaderCells[i].Text);
+            }
+
+            // Check table data
+            ReadOnlyCollection<IWebElement> firstTableDataCells = tableRows[1].FindElements(By.CssSelector("td"));
+            Assert.Equal(tableHeaders.Length, firstTableDataCells.Count);
+            for (int i = 0; i < firstTableDataCells.Count - 1; i++)
+            {
+                Assert.True(firstTableDataCells[i].Text.Length > 0);
             }
 
             // Cleanup
