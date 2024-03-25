@@ -36,6 +36,7 @@ namespace ProjetGPITests
             string[] tableHeaders = ["Nom", "Prénom", "Email", "Sexe", "Date de Naissance", ""];
             IWebElement tableHeaderRow = tableRows[0];
             ReadOnlyCollection<IWebElement> tableHeaderCells = tableHeaderRow.FindElements(By.CssSelector("th"));
+            Assert.Equal(tableHeaders.Length, tableHeaderCells.Count);
             for (int i = 0; i < tableHeaders.Length; i++)
             {
                 Assert.Equal(tableHeaders[i], tableHeaderCells[i].Text);
