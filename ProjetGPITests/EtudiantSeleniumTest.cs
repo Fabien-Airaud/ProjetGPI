@@ -26,7 +26,7 @@ namespace ProjetGPITests
             HeaderBrandTest(chromeDriver);
 
             // Check create button
-            IWebElement createButton = chromeDriver.FindElement(By.CssSelector("a[href=\"Etudiants/Create\"]"));
+            IWebElement createButton = chromeDriver.FindElement(By.CssSelector("a[href='Etudiants/Create']"));
             Assert.Equal("Nouvel étudiant", createButton.Text);
 
             // Get table rows
@@ -49,6 +49,15 @@ namespace ProjetGPITests
             {
                 Assert.True(firstTableDataCells[i].Text.Length > 0);
             }
+
+            ReadOnlyCollection<IWebElement> rowButtons = firstTableDataCells[^1].FindElements(By.CssSelector("a"));
+            Assert.Equal(3, rowButtons.Count);
+            Assert.Equal("Editer", rowButtons[0].Text);
+            Assert.StartsWith("https://localhost:7212/Etudiants/Edit/", rowButtons[0].GetAttribute("href"));
+            Assert.Equal("Détails", rowButtons[1].Text);
+            Assert.StartsWith("https://localhost:7212/Etudiants/Details/", rowButtons[1].GetAttribute("href"));
+            Assert.Equal("Supprimer", rowButtons[2].Text);
+            Assert.StartsWith("https://localhost:7212/Etudiants/Delete/", rowButtons[2].GetAttribute("href"));
 
             // Cleanup
             chromeDriver.Quit();
