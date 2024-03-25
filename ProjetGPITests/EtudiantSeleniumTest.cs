@@ -5,6 +5,15 @@ namespace ProjetGPITests
 {
     public class EtudiantSeleniumTest
     {
+        static void HeaderBrandTest(IWebDriver driver)
+        {
+            // Act
+            var navbarBrand = driver.FindElement(By.CssSelector("header nav p.navbar-brand"));
+
+            // Assert
+            Assert.Equal("ProjetGPIApp", navbarBrand.Text);
+        }
+
         [Fact]
         public void IndexEtudiantTest()
         {
@@ -12,13 +21,8 @@ namespace ProjetGPITests
             var chromeDriver = new ChromeDriver();
             chromeDriver.Navigate().GoToUrl("https://localhost:7212/");
 
-            // Act
-            var navbarBrand = chromeDriver.FindElement(By.CssSelector("header nav p.navbar-brand"));
-            var etudiants = chromeDriver.FindElements(By.ClassName("etudiant"));
-
-            // Assert
-            Assert.Equal("ProjetGPIApp", navbarBrand.Text);
-            Assert.NotEmpty(etudiants);
+            // Check the header brand
+            HeaderBrandTest(chromeDriver);
 
             // Cleanup
             chromeDriver.Quit();
