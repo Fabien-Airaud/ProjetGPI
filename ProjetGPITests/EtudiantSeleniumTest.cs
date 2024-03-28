@@ -11,12 +11,9 @@ namespace ProjetGPITests
         private static readonly string[] indexTableHeaders = ["Nom", "Prénom", "Email", "Sexe", "Date de Naissance", ""];
 
 
-        private static void HeaderBrandTest(IWebDriver driver)
+        private static void CheckHeaderBrand(IWebDriver driver)
         {
-            // Act
             IWebElement navbarBrand = driver.FindElement(By.CssSelector("header nav p.navbar-brand"));
-
-            // Assert
             Assert.Equal("ProjetGPIApp", navbarBrand.Text);
         }
 
@@ -57,7 +54,7 @@ namespace ProjetGPITests
             chromeDriver.Navigate().GoToUrl(baseUrl);
 
             // Check the header brand
-            HeaderBrandTest(chromeDriver);
+            CheckHeaderBrand(chromeDriver);
 
             // Get table rows
             ReadOnlyCollection<IWebElement> tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
@@ -154,7 +151,7 @@ namespace ProjetGPITests
             ClickButtonLink(chromeDriver, baseUrl + "Etudiants/Create", "Nouvel étudiant");
 
             // Check the header brand
-            HeaderBrandTest(chromeDriver);
+            CheckHeaderBrand(chromeDriver);
 
             // Check title
             IWebElement title = chromeDriver.FindElement(By.CssSelector("h2"));
