@@ -6,7 +6,7 @@
 }
 
 
-<a id="ajoutEtudiant" class="btn btn-primary" href="Etudiants/Create" role="button"> Nouvel étudiant </a>
+@Html.ActionLink("Nouvel étudiant", "Create", "Etudiants", null, new { @class = "btn btn-primary", role = "button" })
 
 <table class="table">
     <tr>
