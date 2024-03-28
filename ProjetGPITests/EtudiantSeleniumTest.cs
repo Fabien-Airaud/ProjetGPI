@@ -169,6 +169,7 @@ namespace ProjetGPITests
 
             // Fill and submit form
             EtudiantForm(chromeDriver, false);
+            Assert.StartsWith(baseUrl, chromeDriver.Url);
 
             // Cleanup
             chromeDriver.Quit();
