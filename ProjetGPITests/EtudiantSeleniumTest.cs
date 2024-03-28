@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using ProjetGPI.Models;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -126,14 +127,14 @@ namespace ProjetGPITests
             selectRadio.Click();
         }
 
-        private static void EtudiantForm(IWebDriver driver, bool clearValues = true)
+        private static void EtudiantForm(IWebDriver driver, Etudiant etudiant, bool clearValues = true)
         {
             // Fill form
-            FillInput(driver, "Nom", "Nom", "TestNom", clearValues);
-            FillInput(driver, "Prenom", "Prénom", "TestPrénom", clearValues);
-            FillInput(driver, "Email", "Email", "TestEmail@email.com", clearValues);
-            FillRadio(driver, "Sexe", "Sexe", ["Homme", "Femme", "Autre"], "Femme");
-            FillInput(driver, "DateNais", "Date de Naissance", "01/01/2000", clearValues); // Date format: MM/dd/yyyy
+            FillInput(driver, "Nom", "Nom", etudiant.Nom, clearValues);
+            FillInput(driver, "Prenom", "Prénom", etudiant.Prenom, clearValues); ;
+            FillInput(driver, "Email", "Email", etudiant.Email, clearValues);
+            FillRadio(driver, "Sexe", "Sexe", ["Homme", "Femme", "Autre"], etudiant.Sexe);
+            FillInput(driver, "DateNais", "Date de Naissance", etudiant.DateNais!.Value.ToString("MM/dd/yyyy"), clearValues); // Date format: MM/dd/yyyy
 
             // Submit form
             IWebElement submitButton = driver.FindElement(By.CssSelector("input[type='submit']"));
@@ -148,10 +149,8 @@ namespace ProjetGPITests
             var chromeDriver = new ChromeDriver();
             chromeDriver.Navigate().GoToUrl(baseUrl);
 
-            // Get table rows
-            ReadOnlyCollection<IWebElement> tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
-
             // Get number of rows before creating a new one
+            ReadOnlyCollection<IWebElement> tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
             int rowCount = tableRows.Count;
 
             // Go to create page
@@ -168,8 +167,20 @@ namespace ProjetGPITests
             CheckHasBackButton(chromeDriver, baseUrl);
 
             // Fill and submit form
-            EtudiantForm(chromeDriver, false);
+            Etudiant etudiant = new()
+            {
+                Nom = "TestNom",
+                Prenom = "TestPrénom",
+                Email = "TestEmail@email.com",
+                Sexe = "Femme",
+                DateNais = DateTime.Parse("01/01/2000")
+            };
+            EtudiantForm(chromeDriver, etudiant, false);
             Assert.StartsWith(baseUrl, chromeDriver.Url);
+
+            // Check if row was added
+            tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
+            Assert.Equal(rowCount + 1, tableRows.Count);
 
             // Cleanup
             chromeDriver.Quit();
