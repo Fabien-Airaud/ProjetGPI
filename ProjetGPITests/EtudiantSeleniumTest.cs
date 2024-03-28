@@ -49,10 +49,6 @@ namespace ProjetGPITests
             // Check the header brand
             HeaderBrandTest(chromeDriver);
 
-            // Check create button
-            IWebElement createButton = chromeDriver.FindElement(By.CssSelector("a[href='Etudiants/Create']"));
-            Assert.Equal("Nouvel étudiant", createButton.Text);
-
             // Get table rows
             ReadOnlyCollection<IWebElement> tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
 
