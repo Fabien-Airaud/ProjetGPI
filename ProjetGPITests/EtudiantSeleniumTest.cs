@@ -142,6 +142,21 @@ namespace ProjetGPITests
             submitButton.Click();
         }
 
+        private static void CheckAddedEtudiantRow(IWebDriver driver, Etudiant etudiant)
+        {
+            // Check if row was added
+            IList<IWebElement> tableRows = driver.FindElements(By.CssSelector("table tr"));
+            IWebElement lastRow = tableRows.Last();
+            IList<IWebElement> rowCells = lastRow.FindElements(By.CssSelector("td"));
+
+            // Check row data
+            Assert.Equal(etudiant.Nom, rowCells[0].Text);
+            Assert.Equal(etudiant.Prenom, rowCells[1].Text);
+            Assert.Equal(etudiant.Email, rowCells[2].Text);
+            Assert.Equal(etudiant.Sexe, rowCells[3].Text);
+            Assert.Equal(etudiant.DateNais!.Value.ToString("M/d/yyyy"), rowCells[4].Text);
+        }
+
         [Fact]
         public void CreateEtudiantTest()
         {
@@ -181,6 +196,7 @@ namespace ProjetGPITests
             // Check if row was added
             tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
             Assert.Equal(rowCount + 1, tableRows.Count);
+            CheckAddedEtudiantRow(chromeDriver, etudiant);
 
             // Cleanup
             chromeDriver.Quit();
