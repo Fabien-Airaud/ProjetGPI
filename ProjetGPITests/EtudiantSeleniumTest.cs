@@ -75,5 +75,26 @@ namespace ProjetGPITests
             // Cleanup
             chromeDriver.Quit();
         }
+
+        [Fact]
+        public void CreateEtudiantTest()
+        {
+            // Arrange
+            var chromeDriver = new ChromeDriver();
+            chromeDriver.Navigate().GoToUrl(indexUrl);
+
+            // Get table rows
+            ReadOnlyCollection<IWebElement> tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
+
+            // Get number of rows before creating a new one
+            int rowCount = tableRows.Count;
+
+            // Check create button
+            IWebElement createButton = chromeDriver.FindElement(By.CssSelector("a[href='Etudiants/Create']"));
+            Assert.Equal("Nouvel étudiant", createButton.Text);
+
+            // Cleanup
+            chromeDriver.Quit();
+        }
     }
 }
