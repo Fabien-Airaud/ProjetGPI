@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace ProjetGPITests
 {
@@ -17,6 +18,15 @@ namespace ProjetGPITests
 
             // Assert
             Assert.Equal("ProjetGPIApp", navbarBrand.Text);
+        }
+
+        private static void ClickButtonLink(IWebDriver driver, string linkUrl, string linkText)
+        {
+            IList<IWebElement> links = driver.FindElements(By.CssSelector("a[role='button']"));
+            IWebElement link = links.First(l => l.GetAttribute("href") == linkUrl);
+            Assert.Equal(linkText, link.Text);
+            link.Click();
+            Assert.StartsWith(linkUrl, driver.Url);
         }
 
         private static void IndexTableDataRowTest(ReadOnlyCollection<IWebElement> rowCells)
@@ -86,10 +96,10 @@ namespace ProjetGPITests
             int rowCount = tableRows.Count;
 
             // Go to create page
-            IWebElement createButton = chromeDriver.FindElement(By.CssSelector("a[href='Etudiants/Create']"));
-            Assert.Equal("Nouvel étudiant", createButton.Text);
-            createButton.Click();
-            Assert.StartsWith(baseUrl + "Etudiants/Create", chromeDriver.Url);
+            ClickButtonLink(chromeDriver, baseUrl + "Etudiants/Create", "Nouvel étudiant");
+
+            // Check the header brand
+            HeaderBrandTest(chromeDriver);
 
             // Cleanup
             chromeDriver.Quit();
