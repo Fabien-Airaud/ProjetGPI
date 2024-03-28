@@ -6,7 +6,7 @@ namespace ProjetGPITests
 {
     public class EtudiantSeleniumTest
     {
-        private static readonly string indexUrl = "https://localhost:7212/";
+        private static readonly string baseUrl = "https://localhost:7212/";
         private static readonly string[] indexTableHeaders = ["Nom", "Prénom", "Email", "Sexe", "Date de Naissance", ""];
 
 
@@ -32,11 +32,11 @@ namespace ProjetGPITests
             ReadOnlyCollection<IWebElement> rowButtons = rowCells[^1].FindElements(By.CssSelector("a"));
             Assert.Equal(3, rowButtons.Count);
             Assert.Equal("Editer", rowButtons[0].Text);
-            Assert.StartsWith(indexUrl + "Etudiants/Edit/", rowButtons[0].GetAttribute("href"));
+            Assert.StartsWith(baseUrl + "Etudiants/Edit/", rowButtons[0].GetAttribute("href"));
             Assert.Equal("Détails", rowButtons[1].Text);
-            Assert.StartsWith(indexUrl + "Etudiants/Details/", rowButtons[1].GetAttribute("href"));
+            Assert.StartsWith(baseUrl + "Etudiants/Details/", rowButtons[1].GetAttribute("href"));
             Assert.Equal("Supprimer", rowButtons[2].Text);
-            Assert.StartsWith(indexUrl + "Etudiants/Delete/", rowButtons[2].GetAttribute("href"));
+            Assert.StartsWith(baseUrl + "Etudiants/Delete/", rowButtons[2].GetAttribute("href"));
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace ProjetGPITests
         {
             // Arrange
             var chromeDriver = new ChromeDriver();
-            chromeDriver.Navigate().GoToUrl(indexUrl);
+            chromeDriver.Navigate().GoToUrl(baseUrl);
 
             // Check the header brand
             HeaderBrandTest(chromeDriver);
@@ -77,7 +77,7 @@ namespace ProjetGPITests
         {
             // Arrange
             var chromeDriver = new ChromeDriver();
-            chromeDriver.Navigate().GoToUrl(indexUrl);
+            chromeDriver.Navigate().GoToUrl(baseUrl);
 
             // Get table rows
             ReadOnlyCollection<IWebElement> tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
@@ -85,9 +85,11 @@ namespace ProjetGPITests
             // Get number of rows before creating a new one
             int rowCount = tableRows.Count;
 
-            // Check create button
+            // Go to create page
             IWebElement createButton = chromeDriver.FindElement(By.CssSelector("a[href='Etudiants/Create']"));
             Assert.Equal("Nouvel étudiant", createButton.Text);
+            createButton.Click();
+            Assert.StartsWith(baseUrl + "Etudiants/Create", chromeDriver.Url);
 
             // Cleanup
             chromeDriver.Quit();
