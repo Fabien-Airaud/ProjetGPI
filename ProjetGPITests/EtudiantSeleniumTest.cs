@@ -34,7 +34,7 @@ namespace ProjetGPITests
             Assert.Equal("Retour", backButton.Text);
         }
 
-        private static void IndexTableDataRowTest(ReadOnlyCollection<IWebElement> rowCells)
+        private static void IndexTableDataRowTest(IList<IWebElement> rowCells)
         {
             // Check Etudiant data
             Assert.Equal(indexTableHeaders.Length, rowCells.Count);
@@ -44,7 +44,7 @@ namespace ProjetGPITests
             }
 
             // Check row action buttons
-            ReadOnlyCollection<IWebElement> rowButtons = rowCells[^1].FindElements(By.CssSelector("a"));
+            IList<IWebElement> rowButtons = rowCells[^1].FindElements(By.CssSelector("a"));
             Assert.Equal(3, rowButtons.Count);
             Assert.Equal("Editer", rowButtons[0].Text);
             Assert.StartsWith(baseUrl + "Etudiants/Edit/", rowButtons[0].GetAttribute("href"));
@@ -65,11 +65,11 @@ namespace ProjetGPITests
             CheckHeaderBrand(chromeDriver);
 
             // Get table rows
-            ReadOnlyCollection<IWebElement> tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
+            IList<IWebElement> tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
 
             // Check table headers
             IWebElement tableHeaderRow = tableRows[0];
-            ReadOnlyCollection<IWebElement> tableHeaderCells = tableHeaderRow.FindElements(By.CssSelector("th"));
+            IList<IWebElement> tableHeaderCells = tableHeaderRow.FindElements(By.CssSelector("th"));
             Assert.Equal(indexTableHeaders.Length, tableHeaderCells.Count);
             for (int i = 0; i < indexTableHeaders.Length; i++)
             {
@@ -79,7 +79,7 @@ namespace ProjetGPITests
             // Check table data
             for (int i = 1; i < tableRows.Count; i++)
             {
-                ReadOnlyCollection<IWebElement> rowCells = tableRows[i].FindElements(By.CssSelector("td"));
+                IList<IWebElement> rowCells = tableRows[i].FindElements(By.CssSelector("td"));
                 IndexTableDataRowTest(rowCells);
             }
 
@@ -150,7 +150,7 @@ namespace ProjetGPITests
             chromeDriver.Navigate().GoToUrl(baseUrl);
 
             // Get number of rows before creating a new one
-            ReadOnlyCollection<IWebElement> tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
+            IList<IWebElement> tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
             int rowCount = tableRows.Count;
 
             // Go to create page
