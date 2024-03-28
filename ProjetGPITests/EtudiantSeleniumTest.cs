@@ -82,6 +82,61 @@ namespace ProjetGPITests
             chromeDriver.Quit();
         }
 
+        private static void FillInput(IWebDriver driver, string inputId, string labelText, string value, bool clearValue)
+        {
+            // Click on label to focus input
+            IWebElement label = driver.FindElement(By.CssSelector($"label[for='{inputId}']"));
+            Assert.Equal(labelText, label.Text);
+            label.Click();
+
+            // Check input is selected
+            IWebElement active = driver.SwitchTo().ActiveElement();
+            Assert.Equal("input", active.TagName);
+            Assert.Equal(inputId, active.GetAttribute("id"));
+
+            // Fill input
+            if (clearValue) active.Clear();
+            active.SendKeys(value);
+        }
+
+        private static void FillRadio(IWebDriver driver, string radioId, string labelText, string[] radioValues, string selectValue)
+        {
+            // Click on label to focus radio group
+            IWebElement label = driver.FindElement(By.CssSelector($"label[for='{radioId}']"));
+            Assert.Equal(labelText, label.Text);
+            label.Click();
+
+            // Check radios
+            IList<IWebElement> radios = driver.FindElements(By.Id(radioId));
+            Assert.Equal(radioValues.Length, radios.Count);
+            Assert.Equal(radios.First(), driver.SwitchTo().ActiveElement()); // Check first radio is selected
+            foreach (IWebElement radio in radios)
+            {
+                Assert.Equal("radio", radio.GetAttribute("type"));
+                Assert.Equal(radioId, radio.GetAttribute("id"));
+                Assert.Contains(radio.GetAttribute("value"), radioValues);
+            }
+
+            // Select radio
+            IWebElement selectRadio = driver.FindElement(By.CssSelector($"input[type='radio'][id='{radioId}'][value='{selectValue}']"));
+            selectRadio.Click();
+        }
+
+        private static void EtudiantForm(IWebDriver driver, bool clearValues = true)
+        {
+            // Fill form
+            FillInput(driver, "Nom", "Nom", "TestNom", clearValues);
+            FillInput(driver, "Prenom", "Prénom", "TestPrénom", clearValues);
+            FillInput(driver, "Email", "Email", "TestEmail@email.com", clearValues);
+            FillRadio(driver, "Sexe", "Sexe", ["Homme", "Femme", "Autre"], "Femme");
+            FillInput(driver, "DateNais", "Date de Naissance", "01/01/2000", clearValues); // Date format: MM/dd/yyyy
+
+            // Submit form
+            IWebElement submitButton = driver.FindElement(By.CssSelector("input[type='submit']"));
+            Assert.Equal("Enregistrer", submitButton.GetAttribute("value"));
+            submitButton.Click();
+        }
+
         [Fact]
         public void CreateEtudiantTest()
         {
@@ -100,6 +155,13 @@ namespace ProjetGPITests
 
             // Check the header brand
             HeaderBrandTest(chromeDriver);
+
+            // Check title
+            IWebElement title = chromeDriver.FindElement(By.CssSelector("h2"));
+            Assert.Equal("Nouvel Etudiant", title.Text);
+
+            // Fill and submit form
+            EtudiantForm(chromeDriver, false);
 
             // Cleanup
             chromeDriver.Quit();
