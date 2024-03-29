@@ -377,6 +377,11 @@ namespace ProjetGPITests
                 DateNais = DateTime.Parse(rowCells[4].Text)
             };
 
+            // Go to delete page
+            IWebElement deleteButton = rowCells[^1].FindElements(By.CssSelector("a"))[2];
+            deleteButton.Click();
+            Assert.StartsWith(baseUrl + "Etudiants/Delete/", chromeDriver.Url);
+
             // Cleanup
             chromeDriver.Quit();
         }
