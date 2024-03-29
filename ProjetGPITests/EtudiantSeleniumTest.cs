@@ -300,6 +300,11 @@ namespace ProjetGPITests
                 DateNais = DateTime.Parse(rowCells[4].Text)
             };
 
+            // Go to details page
+            IWebElement detailsButton = rowCells[^1].FindElements(By.CssSelector("a"))[1];
+            detailsButton.Click();
+            Assert.StartsWith(baseUrl + "Etudiants/Details/", chromeDriver.Url);
+
             // Cleanup
             chromeDriver.Quit();
         }
