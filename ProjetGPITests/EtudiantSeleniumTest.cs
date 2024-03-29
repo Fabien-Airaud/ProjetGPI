@@ -396,6 +396,9 @@ namespace ProjetGPITests
             // Check if back button is present
             CheckHasBackButton(chromeDriver, baseUrl);
 
+            // Check Etudiant data
+            DetailsEtudiantList(chromeDriver, etudiant);
+
             // Cleanup
             chromeDriver.Quit();
         }
