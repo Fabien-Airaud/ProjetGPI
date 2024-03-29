@@ -87,7 +87,7 @@ namespace ProjetGPITests
             chromeDriver.Quit();
         }
 
-        private static void FillInput(IWebDriver driver, string inputId, string labelText, string value, bool clearValue)
+        private static void FillInput(IWebDriver driver, string inputId, string labelText, string value)
         {
             // Click on label to focus input
             IWebElement label = driver.FindElement(By.CssSelector($"label[for='{inputId}']"));
@@ -100,7 +100,7 @@ namespace ProjetGPITests
             Assert.Equal(inputId, active.GetAttribute("id"));
 
             // Fill input
-            if (clearValue) active.Clear();
+            active.Clear();
             active.SendKeys(value);
         }
 
@@ -130,11 +130,11 @@ namespace ProjetGPITests
         private static void EtudiantCreateForm(IWebDriver driver, Etudiant etudiant)
         {
             // Fill form
-            FillInput(driver, "Nom", "Nom", etudiant.Nom, true);
-            FillInput(driver, "Prenom", "Prénom", etudiant.Prenom, true); ;
-            FillInput(driver, "Email", "Email", etudiant.Email, true);
+            FillInput(driver, "Nom", "Nom", etudiant.Nom);
+            FillInput(driver, "Prenom", "Prénom", etudiant.Prenom); ;
+            FillInput(driver, "Email", "Email", etudiant.Email);
             FillRadio(driver, "Sexe", "Sexe", ["Homme", "Femme", "Autre"], etudiant.Sexe);
-            FillInput(driver, "DateNais", "Date de Naissance", etudiant.DateNais!.Value.ToString("MM/dd/yyyy"), true); // Date format: MM/dd/yyyy
+            FillInput(driver, "DateNais", "Date de Naissance", etudiant.DateNais!.Value.ToString("MM/dd/yyyy")); // Date format: MM/dd/yyyy
 
             // Submit form
             IWebElement submitButton = driver.FindElement(By.CssSelector("input[type='submit']"));
