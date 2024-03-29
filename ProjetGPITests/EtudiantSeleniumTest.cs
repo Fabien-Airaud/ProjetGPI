@@ -2,8 +2,6 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using ProjetGPI.Models;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 
 namespace ProjetGPITests
 {
@@ -172,6 +170,38 @@ namespace ProjetGPITests
                 Assert.Equal(etudiant.Sexe, rowCells[3].Text);
                 Assert.Equal(etudiant.DateNais!.Value.ToString("M/d/yyyy"), rowCells[4].Text);
             }
+        }
+
+        [Fact]
+        public void CancelCreateEtudiantTest()
+        {
+            // Arrange
+            var chromeDriver = new ChromeDriver();
+            chromeDriver.Navigate().GoToUrl(baseUrl);
+
+            // Get number of rows before not creating a new one
+            IList<IWebElement> tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
+            int rowCount = tableRows.Count;
+
+            // Go to create page
+            ClickButtonLink(chromeDriver, baseUrl + "Etudiants/Create", "Nouvel étudiant");
+
+            // Check the header brand
+            CheckHeaderBrand(chromeDriver);
+
+            // Check title
+            IWebElement title = chromeDriver.FindElement(By.CssSelector("h2"));
+            Assert.Equal("Nouvel Etudiant", title.Text);
+
+            // Go back to index
+            ClickButtonLink(chromeDriver, baseUrl, "Retour");
+
+            // Check if no row was added
+            tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
+            Assert.Equal(rowCount, tableRows.Count);
+
+            // Cleanup
+            chromeDriver.Quit();
         }
 
         [Fact]
