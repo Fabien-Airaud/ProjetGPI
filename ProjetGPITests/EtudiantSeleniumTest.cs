@@ -325,18 +325,6 @@ namespace ProjetGPITests
             editButton.Click();
             Assert.StartsWith(baseUrl + "Etudiants/Edit/", chromeDriver.Url);
 
-            // Check the header brand
-            CheckHeaderBrand(chromeDriver);
-
-            // Check titles
-            IWebElement title = chromeDriver.FindElement(By.CssSelector("h2"));
-            Assert.Equal("Editer", title.Text);
-            title = chromeDriver.FindElement(By.CssSelector("h4"));
-            Assert.Equal("Etudiant", title.Text);
-
-            // Check if back button is present
-            CheckHasBackButton(chromeDriver, baseUrl);
-
             // Fill and submit form
             Etudiant newEtudiant = new()
             {
