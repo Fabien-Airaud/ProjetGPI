@@ -226,6 +226,15 @@ namespace ProjetGPITests
             editButton.Click();
             Assert.StartsWith(baseUrl + "Etudiants/Edit/", chromeDriver.Url);
 
+            // Check the header brand
+            CheckHeaderBrand(chromeDriver);
+
+            // Check titles
+            IWebElement title = chromeDriver.FindElement(By.CssSelector("h2"));
+            Assert.Equal("Editer", title.Text);
+            title = chromeDriver.FindElement(By.CssSelector("h4"));
+            Assert.Equal("Etudiant", title.Text);
+
             // Cleanup
             chromeDriver.Quit();
         }
