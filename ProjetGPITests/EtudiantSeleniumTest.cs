@@ -423,6 +423,57 @@ namespace ProjetGPITests
         }
 
         [Fact]
+        public void CancelDeleteEtudiantTest()
+        {
+            // Arrange
+            var chromeDriver = new ChromeDriver();
+            chromeDriver.Navigate().GoToUrl(baseUrl);
+
+            // Get the last Etudiant row data and get the number of rows
+            IList<IWebElement> tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
+            int rowCount = tableRows.Count;
+            IList<IWebElement> rowCells = tableRows[^1].FindElements(By.CssSelector("td"));
+            Etudiant etudiant = new()
+            {
+                Nom = rowCells[0].Text,
+                Prenom = rowCells[1].Text,
+                Email = rowCells[2].Text,
+                Sexe = rowCells[3].Text,
+                DateNais = DateTime.Parse(rowCells[4].Text)
+            };
+
+            // Go to delete page
+            IWebElement deleteButton = rowCells[^1].FindElements(By.CssSelector("a"))[2];
+            deleteButton.Click();
+            Assert.StartsWith(baseUrl + "Etudiants/Delete/", chromeDriver.Url);
+
+            // Check the header brand
+            CheckHeaderBrand(chromeDriver);
+
+            // Check titles
+            IWebElement title = chromeDriver.FindElement(By.CssSelector("h2"));
+            Assert.Equal("Supprimer", title.Text);
+            title = chromeDriver.FindElement(By.CssSelector("h3"));
+            Assert.Equal("Voulez-vous vraiment supprimer cet étudiant ?", title.Text);
+            title = chromeDriver.FindElement(By.CssSelector("h4"));
+            Assert.Equal("Etudiant", title.Text);
+
+            // Check Etudiant data
+            DetailsEtudiantList(chromeDriver, etudiant);
+
+            // Go back to index
+            ClickButtonLink(chromeDriver, baseUrl, "Retour");
+
+            // Check if no row was deleted
+            tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
+            Assert.Equal(rowCount, tableRows.Count); // No row was deleted
+            CheckEtudiantRow(chromeDriver, etudiant);
+
+            // Cleanup
+            chromeDriver.Quit();
+        }
+
+        [Fact]
         public void DeleteEtudiantTest()
         {
             // Arrange
