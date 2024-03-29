@@ -356,5 +356,29 @@ namespace ProjetGPITests
             // Cleanup
             chromeDriver.Quit();
         }
+
+        [Fact]
+        public void DeleteEtudiantTest()
+        {
+            // Arrange
+            var chromeDriver = new ChromeDriver();
+            chromeDriver.Navigate().GoToUrl(baseUrl);
+
+            // Get the last Etudiant row data before deleting it and get the number of rows
+            IList<IWebElement> tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
+            int rowCount = tableRows.Count;
+            IList<IWebElement> rowCells = tableRows[^1].FindElements(By.CssSelector("td"));
+            Etudiant etudiant = new()
+            {
+                Nom = rowCells[0].Text,
+                Prenom = rowCells[1].Text,
+                Email = rowCells[2].Text,
+                Sexe = rowCells[3].Text,
+                DateNais = DateTime.Parse(rowCells[4].Text)
+            };
+
+            // Cleanup
+            chromeDriver.Quit();
+        }
     }
 }
