@@ -305,6 +305,18 @@ namespace ProjetGPITests
             detailsButton.Click();
             Assert.StartsWith(baseUrl + "Etudiants/Details/", chromeDriver.Url);
 
+            // Check the header brand
+            CheckHeaderBrand(chromeDriver);
+
+            // Check titles
+            IWebElement title = chromeDriver.FindElement(By.CssSelector("h2"));
+            Assert.Equal("Details", title.Text);
+            title = chromeDriver.FindElement(By.CssSelector("h4"));
+            Assert.Equal("Etudiant", title.Text);
+
+            // Check if back button is present
+            CheckHasBackButton(chromeDriver, baseUrl);
+
             // Cleanup
             chromeDriver.Quit();
         }
