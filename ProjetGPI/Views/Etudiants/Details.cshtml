@@ -58,7 +58,7 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <a class="btn btn-primary" href="./../../Etudiants/Index" role="button"> Retour </a>
+            @Html.ActionLink("Retour", "Index", "Etudiants", null, new { @class = "btn btn-primary", role = "button" })
         </div>
     }
 </div>
