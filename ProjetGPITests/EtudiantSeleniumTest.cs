@@ -201,5 +201,28 @@ namespace ProjetGPITests
             // Cleanup
             chromeDriver.Quit();
         }
+
+        [Fact]
+        public void EditEtudiantTest()
+        {
+            // Arrange
+            var chromeDriver = new ChromeDriver();
+            chromeDriver.Navigate().GoToUrl(baseUrl);
+
+            // Get the first row data before editing
+            IList<IWebElement> tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
+            IList<IWebElement> rowCells = tableRows[1].FindElements(By.CssSelector("td"));
+            Etudiant oldEtudiant = new()
+            {
+                Nom = rowCells[0].Text,
+                Prenom = rowCells[1].Text,
+                Email = rowCells[2].Text,
+                Sexe = rowCells[3].Text,
+                DateNais = DateTime.Parse(rowCells[4].Text)
+            };
+
+            // Cleanup
+            chromeDriver.Quit();
+        }
     }
 }
