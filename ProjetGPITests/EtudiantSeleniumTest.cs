@@ -26,13 +26,6 @@ namespace ProjetGPITests
             Assert.StartsWith(linkUrl, driver.Url);
         }
 
-        private static void CheckHasBackButton(IWebDriver driver, string backUrl)
-        {
-            IList<IWebElement> buttons = driver.FindElements(By.CssSelector("a[role='button']"));
-            IWebElement backButton = buttons.First(b => b.GetAttribute("href") == backUrl);
-            Assert.Equal("Retour", backButton.Text);
-        }
-
         private static void IndexTableDataRowTest(IList<IWebElement> rowCells)
         {
             // Check Etudiant data
