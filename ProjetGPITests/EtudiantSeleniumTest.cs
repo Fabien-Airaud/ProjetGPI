@@ -399,6 +399,12 @@ namespace ProjetGPITests
             // Check Etudiant data
             DetailsEtudiantList(chromeDriver, etudiant);
 
+            // Delete Etudiant
+            IWebElement submitButton = chromeDriver.FindElement(By.CssSelector("input[type='submit']"));
+            Assert.Equal("Supprimer", submitButton.GetAttribute("value"));
+            submitButton.Click();
+            Assert.StartsWith(baseUrl, chromeDriver.Url);
+
             // Cleanup
             chromeDriver.Quit();
         }
