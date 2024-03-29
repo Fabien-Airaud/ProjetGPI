@@ -416,6 +416,11 @@ namespace ProjetGPITests
             submitButton.Click();
             Assert.StartsWith(baseUrl, chromeDriver.Url);
 
+            // Check if row was deleted
+            tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
+            Assert.Equal(rowCount - 1, tableRows.Count); // One row was deleted
+            CheckEtudiantRow(chromeDriver, etudiant, -1, true);
+
             // Cleanup
             chromeDriver.Quit();
         }
