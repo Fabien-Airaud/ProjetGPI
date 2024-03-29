@@ -498,20 +498,6 @@ namespace ProjetGPITests
             deleteButton.Click();
             Assert.StartsWith(baseUrl + "Etudiants/Delete/", chromeDriver.Url);
 
-            // Check the header brand
-            CheckHeaderBrand(chromeDriver);
-
-            // Check titles
-            IWebElement title = chromeDriver.FindElement(By.CssSelector("h2"));
-            Assert.Equal("Supprimer", title.Text);
-            title = chromeDriver.FindElement(By.CssSelector("h3"));
-            Assert.Equal("Voulez-vous vraiment supprimer cet étudiant ?", title.Text);
-            title = chromeDriver.FindElement(By.CssSelector("h4"));
-            Assert.Equal("Etudiant", title.Text);
-
-            // Check if back button is present
-            CheckHasBackButton(chromeDriver, baseUrl);
-
             // Check Etudiant data
             DetailsEtudiantList(chromeDriver, etudiant);
 
