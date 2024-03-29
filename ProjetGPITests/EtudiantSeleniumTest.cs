@@ -281,6 +281,38 @@ namespace ProjetGPITests
             chromeDriver.Quit();
         }
 
+        private static void DetailsEtudiantList(IWebDriver driver, Etudiant etudiant)
+        {
+            // Check Etudiant details by getting all dt and dd elements in dl
+            IList<IWebElement> names = driver.FindElements(By.CssSelector("dl > *"));
+            Assert.Equal(5 * 2, names.Count);
+
+            Assert.Equal("dt", names[0].TagName);
+            Assert.Equal("Nom", names[0].Text);
+            Assert.Equal("dd", names[1].TagName);
+            Assert.Equal(etudiant.Nom, names[1].Text);
+
+            Assert.Equal("dt", names[2].TagName);
+            Assert.Equal("Prénom", names[2].Text);
+            Assert.Equal("dd", names[3].TagName);
+            Assert.Equal(etudiant.Prenom, names[3].Text);
+
+            Assert.Equal("dt", names[4].TagName);
+            Assert.Equal("Email", names[4].Text);
+            Assert.Equal("dd", names[5].TagName);
+            Assert.Equal(etudiant.Email, names[5].Text);
+
+            Assert.Equal("dt", names[6].TagName);
+            Assert.Equal("Sexe", names[6].Text);
+            Assert.Equal("dd", names[7].TagName);
+            Assert.Equal(etudiant.Sexe, names[7].Text);
+
+            Assert.Equal("dt", names[8].TagName);
+            Assert.Equal("Date de Naissance", names[8].Text);
+            Assert.Equal("dd", names[9].TagName);
+            Assert.Equal(etudiant.DateNais!.Value.ToString("M/d/yyyy"), names[9].Text);
+        }
+
         [Fact]
         public void DetailsEtudiantTest()
         {
@@ -316,6 +348,9 @@ namespace ProjetGPITests
 
             // Check if back button is present
             CheckHasBackButton(chromeDriver, baseUrl);
+
+            // Check Etudiant data
+            DetailsEtudiantList(chromeDriver, etudiant);
 
             // Cleanup
             chromeDriver.Quit();
