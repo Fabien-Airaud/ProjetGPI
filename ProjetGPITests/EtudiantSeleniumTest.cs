@@ -235,6 +235,9 @@ namespace ProjetGPITests
             title = chromeDriver.FindElement(By.CssSelector("h4"));
             Assert.Equal("Etudiant", title.Text);
 
+            // Check if back button is present
+            CheckHasBackButton(chromeDriver, baseUrl);
+
             // Cleanup
             chromeDriver.Quit();
         }
