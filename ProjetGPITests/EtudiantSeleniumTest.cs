@@ -255,6 +255,52 @@ namespace ProjetGPITests
         }
 
         [Fact]
+        public void CancelEditEtudiantTest()
+        {
+            // Arrange
+            var chromeDriver = new ChromeDriver();
+            chromeDriver.Navigate().GoToUrl(baseUrl);
+
+            // Get the first Etudiant row data before editing and get the number of rows
+            IList<IWebElement> tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
+            int rowCount = tableRows.Count;
+            IList<IWebElement> rowCells = tableRows[1].FindElements(By.CssSelector("td"));
+            Etudiant oldEtudiant = new()
+            {
+                Nom = rowCells[0].Text,
+                Prenom = rowCells[1].Text,
+                Email = rowCells[2].Text,
+                Sexe = rowCells[3].Text,
+                DateNais = DateTime.Parse(rowCells[4].Text)
+            };
+
+            // Go to edit page
+            IWebElement editButton = rowCells[^1].FindElements(By.CssSelector("a"))[0];
+            editButton.Click();
+            Assert.StartsWith(baseUrl + "Etudiants/Edit/", chromeDriver.Url);
+
+            // Check the header brand
+            CheckHeaderBrand(chromeDriver);
+
+            // Check titles
+            IWebElement title = chromeDriver.FindElement(By.CssSelector("h2"));
+            Assert.Equal("Editer", title.Text);
+            title = chromeDriver.FindElement(By.CssSelector("h4"));
+            Assert.Equal("Etudiant", title.Text);
+
+            // Go back to index
+            ClickButtonLink(chromeDriver, baseUrl, "Retour");
+
+            // Check if no row was added and old row data is still there
+            tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
+            Assert.Equal(rowCount, tableRows.Count); // No new row was added
+            CheckEtudiantRow(chromeDriver, oldEtudiant, 1);
+
+            // Cleanup
+            chromeDriver.Quit();
+        }
+
+        [Fact]
         public void EditEtudiantTest()
         {
             // Arrange
