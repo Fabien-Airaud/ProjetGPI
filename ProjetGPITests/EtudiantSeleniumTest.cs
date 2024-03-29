@@ -230,7 +230,7 @@ namespace ProjetGPITests
             var chromeDriver = new ChromeDriver();
             chromeDriver.Navigate().GoToUrl(baseUrl);
 
-            // Get the first row data before editing and get the number of rows
+            // Get the first Etudiant row data before editing and get the number of rows
             IList<IWebElement> tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
             int rowCount = tableRows.Count;
             IList<IWebElement> rowCells = tableRows[1].FindElements(By.CssSelector("td"));
@@ -276,6 +276,29 @@ namespace ProjetGPITests
             tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
             Assert.Equal(rowCount, tableRows.Count); // No new row was added after editing
             CheckEtudiantRow(chromeDriver, newEtudiant, 1);
+
+            // Cleanup
+            chromeDriver.Quit();
+        }
+
+        [Fact]
+        public void DetailsEtudiantTest()
+        {
+            // Arrange
+            var chromeDriver = new ChromeDriver();
+            chromeDriver.Navigate().GoToUrl(baseUrl);
+
+            // Get the first Etudiant row data before viewing details
+            IList<IWebElement> tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
+            IList<IWebElement> rowCells = tableRows[1].FindElements(By.CssSelector("td"));
+            Etudiant etudiant = new()
+            {
+                Nom = rowCells[0].Text,
+                Prenom = rowCells[1].Text,
+                Email = rowCells[2].Text,
+                Sexe = rowCells[3].Text,
+                DateNais = DateTime.Parse(rowCells[4].Text)
+            };
 
             // Cleanup
             chromeDriver.Quit();
