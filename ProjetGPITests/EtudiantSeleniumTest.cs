@@ -148,7 +148,7 @@ namespace ProjetGPITests
             submitButton.Click();
         }
 
-        private static void CheckEtudiantRow(IWebDriver driver, Etudiant etudiant, int rowNumber = -1)
+        private static void CheckEtudiantRow(IWebDriver driver, Etudiant etudiant, int rowNumber = -1, bool notEqual = false)
         {
             // Check if row was added
             IList<IWebElement> tableRows = driver.FindElements(By.CssSelector("table tr"));
@@ -156,11 +156,22 @@ namespace ProjetGPITests
             IList<IWebElement> rowCells = lastRow.FindElements(By.CssSelector("td"));
 
             // Check row data
-            Assert.Equal(etudiant.Nom, rowCells[0].Text);
-            Assert.Equal(etudiant.Prenom, rowCells[1].Text);
-            Assert.Equal(etudiant.Email, rowCells[2].Text);
-            Assert.Equal(etudiant.Sexe, rowCells[3].Text);
-            Assert.Equal(etudiant.DateNais!.Value.ToString("M/d/yyyy"), rowCells[4].Text);
+            if (notEqual)
+            {
+                Assert.NotEqual(etudiant.Nom, rowCells[0].Text);
+                Assert.NotEqual(etudiant.Prenom, rowCells[1].Text);
+                Assert.NotEqual(etudiant.Email, rowCells[2].Text);
+                Assert.NotEqual(etudiant.Sexe, rowCells[3].Text);
+                Assert.NotEqual(etudiant.DateNais!.Value.ToString("M/d/yyyy"), rowCells[4].Text);
+            }
+            else
+            {
+                Assert.Equal(etudiant.Nom, rowCells[0].Text);
+                Assert.Equal(etudiant.Prenom, rowCells[1].Text);
+                Assert.Equal(etudiant.Email, rowCells[2].Text);
+                Assert.Equal(etudiant.Sexe, rowCells[3].Text);
+                Assert.Equal(etudiant.DateNais!.Value.ToString("M/d/yyyy"), rowCells[4].Text);
+            }
         }
 
         [Fact]
