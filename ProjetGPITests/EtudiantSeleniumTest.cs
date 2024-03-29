@@ -131,7 +131,7 @@ namespace ProjetGPITests
         {
             // Fill form
             FillInput(driver, "Nom", "Nom", etudiant.Nom);
-            FillInput(driver, "Prenom", "Prénom", etudiant.Prenom); ;
+            FillInput(driver, "Prenom", "Prénom", etudiant.Prenom);
             FillInput(driver, "Email", "Email", etudiant.Email);
             FillRadio(driver, "Sexe", "Sexe", ["Homme", "Femme", "Autre"], etudiant.Sexe);
             FillInput(driver, "DateNais", "Date de Naissance", etudiant.DateNais!.Value.ToString("MM/dd/yyyy")); // Date format: MM/dd/yyyy
@@ -202,6 +202,21 @@ namespace ProjetGPITests
             chromeDriver.Quit();
         }
 
+        private static void EtudiantEditForm(IWebDriver driver, Etudiant etudiant)
+        {
+            // Fill form
+            FillInput(driver, "Nom", "Nom", etudiant.Nom);
+            FillInput(driver, "Prenom", "Prénom", etudiant.Prenom);
+            FillInput(driver, "Email", "Email", etudiant.Email);
+            FillInput(driver, "Sexe", "Sexe", etudiant.Sexe);
+            FillInput(driver, "DateNais", "Date de Naissance", etudiant.DateNais!.Value.ToString("MM/dd/yyyy")); // Date format: MM/dd/yyyy
+
+            // Submit form
+            IWebElement submitButton = driver.FindElement(By.CssSelector("input[type='submit']"));
+            Assert.Equal("Enregistrer", submitButton.GetAttribute("value"));
+            submitButton.Click();
+        }
+
         [Fact]
         public void EditEtudiantTest()
         {
@@ -237,6 +252,18 @@ namespace ProjetGPITests
 
             // Check if back button is present
             CheckHasBackButton(chromeDriver, baseUrl);
+
+            // Fill and submit form
+            Etudiant newEtudiant = new()
+            {
+                Nom = "TestNom",
+                Prenom = "TestPrénom",
+                Email = oldEtudiant.Email,
+                Sexe = "Autre",
+                DateNais = oldEtudiant.DateNais
+            };
+            EtudiantEditForm(chromeDriver, newEtudiant);
+            Assert.StartsWith(baseUrl, chromeDriver.Url);
 
             // Cleanup
             chromeDriver.Quit();
