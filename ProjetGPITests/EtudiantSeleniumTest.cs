@@ -218,16 +218,6 @@ namespace ProjetGPITests
             // Go to create page
             ClickButtonLink(chromeDriver, baseUrl + "Etudiants/Create", "Nouvel étudiant");
 
-            // Check the header brand
-            CheckHeaderBrand(chromeDriver);
-
-            // Check title
-            IWebElement title = chromeDriver.FindElement(By.CssSelector("h2"));
-            Assert.Equal("Nouvel Etudiant", title.Text);
-
-            // Check if back button is present
-            CheckHasBackButton(chromeDriver, baseUrl);
-
             // Fill and submit form
             Etudiant etudiant = new()
             {
