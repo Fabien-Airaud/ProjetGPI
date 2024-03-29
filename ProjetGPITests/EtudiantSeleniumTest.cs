@@ -127,14 +127,14 @@ namespace ProjetGPITests
             selectRadio.Click();
         }
 
-        private static void EtudiantForm(IWebDriver driver, Etudiant etudiant, bool clearValues = true)
+        private static void EtudiantCreateForm(IWebDriver driver, Etudiant etudiant)
         {
             // Fill form
-            FillInput(driver, "Nom", "Nom", etudiant.Nom, clearValues);
-            FillInput(driver, "Prenom", "Prénom", etudiant.Prenom, clearValues); ;
-            FillInput(driver, "Email", "Email", etudiant.Email, clearValues);
+            FillInput(driver, "Nom", "Nom", etudiant.Nom, true);
+            FillInput(driver, "Prenom", "Prénom", etudiant.Prenom, true); ;
+            FillInput(driver, "Email", "Email", etudiant.Email, true);
             FillRadio(driver, "Sexe", "Sexe", ["Homme", "Femme", "Autre"], etudiant.Sexe);
-            FillInput(driver, "DateNais", "Date de Naissance", etudiant.DateNais!.Value.ToString("MM/dd/yyyy"), clearValues); // Date format: MM/dd/yyyy
+            FillInput(driver, "DateNais", "Date de Naissance", etudiant.DateNais!.Value.ToString("MM/dd/yyyy"), true); // Date format: MM/dd/yyyy
 
             // Submit form
             IWebElement submitButton = driver.FindElement(By.CssSelector("input[type='submit']"));
@@ -190,7 +190,7 @@ namespace ProjetGPITests
                 Sexe = "Femme",
                 DateNais = DateTime.Parse("01/01/2000")
             };
-            EtudiantForm(chromeDriver, etudiant, false);
+            EtudiantCreateForm(chromeDriver, etudiant);
             Assert.StartsWith(baseUrl, chromeDriver.Url);
 
             // Check if row was added
