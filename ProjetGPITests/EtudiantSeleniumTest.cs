@@ -272,7 +272,7 @@ namespace ProjetGPITests
             EtudiantEditForm(chromeDriver, newEtudiant);
             Assert.StartsWith(baseUrl, chromeDriver.Url);
 
-            // Check if row was added
+            // Check if no row was added
             tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
             Assert.Equal(rowCount, tableRows.Count); // No new row was added after editing
             CheckEtudiantRow(chromeDriver, newEtudiant, 1);
