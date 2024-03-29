@@ -63,7 +63,7 @@
                 <input class="btn btn-primary" type="submit" value="Enregistrer" />
             </div>
             <div>
-                <a class="btn btn-primary" href="./../../Etudiants/Index" role="button"> Retour </a>
+                @Html.ActionLink("Retour", "Index", "Etudiants", null, new { @class = "btn btn-primary", role = "button" })
             </div>
         </div>
     </div>
