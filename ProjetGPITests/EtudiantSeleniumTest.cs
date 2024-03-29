@@ -221,6 +221,11 @@ namespace ProjetGPITests
                 DateNais = DateTime.Parse(rowCells[4].Text)
             };
 
+            // Go to edit page
+            IWebElement editButton = rowCells[^1].FindElements(By.CssSelector("a"))[0];
+            editButton.Click();
+            Assert.StartsWith(baseUrl + "Etudiants/Edit/", chromeDriver.Url);
+
             // Cleanup
             chromeDriver.Quit();
         }
