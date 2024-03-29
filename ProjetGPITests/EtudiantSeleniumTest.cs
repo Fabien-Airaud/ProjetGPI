@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using Microsoft.IdentityModel.Tokens;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using ProjetGPI.Models;
 using System.Collections.ObjectModel;
@@ -100,8 +101,13 @@ namespace ProjetGPITests
             Assert.Equal(inputId, active.GetAttribute("id"));
 
             // Fill input
-            active.Clear();
-            active.SendKeys(value);
+            string inputValue = active.GetAttribute("value");
+            if (!inputValue.IsNullOrEmpty() && active.GetAttribute("type") == "date") inputValue = DateTime.Parse(inputValue).ToString("MM/dd/yyyy");
+            if (!inputValue.Equals(value))
+            {
+                if (!inputValue.IsNullOrEmpty()) active.Clear();
+                active.SendKeys(value);
+            }
         }
 
         private static void FillRadio(IWebDriver driver, string radioId, string labelText, string[] radioValues, string selectValue)
@@ -224,8 +230,9 @@ namespace ProjetGPITests
             var chromeDriver = new ChromeDriver();
             chromeDriver.Navigate().GoToUrl(baseUrl);
 
-            // Get the first row data before editing
+            // Get the first row data before editing and get the number of rows
             IList<IWebElement> tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
+            int rowCount = tableRows.Count;
             IList<IWebElement> rowCells = tableRows[1].FindElements(By.CssSelector("td"));
             Etudiant oldEtudiant = new()
             {
@@ -264,6 +271,11 @@ namespace ProjetGPITests
             };
             EtudiantEditForm(chromeDriver, newEtudiant);
             Assert.StartsWith(baseUrl, chromeDriver.Url);
+
+            // Check if row was added
+            tableRows = chromeDriver.FindElements(By.CssSelector("table tr"));
+            Assert.Equal(rowCount, tableRows.Count); // No new row was added after editing
+            CheckEtudiantRow(chromeDriver, newEtudiant, 1);
 
             // Cleanup
             chromeDriver.Quit();
