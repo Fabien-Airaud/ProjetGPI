@@ -2,9 +2,6 @@ pipeline {
     agent any
 
     environment {
-        // dotnet = 'C:\\Program Files\\dotnet\\dotnet.exe'
-        // puppet = 'C:\\Program Files\\Puppet Labs\\Puppet\\bin\\puppet.bat'
-        msdeploy = 'C:\\Program Files (x86)\\IIS\\Microsoft Web Deploy V3\\msdeploy.exe'
         testAppName = 'TestAppSite'
         testAppSite = 'C:\\inetpub\\wwwroot\\ProjetGPI\\TestApp'
         completeAppSite = 'C:\\inetpub\\wwwroot\\ProjetGPI\\CompleteApp'
@@ -48,7 +45,7 @@ pipeline {
                 bat 'net stop "w3svc"'
 
                 // Deploiement des paquets sur le site de test IIS
-                bat '${env.msdeploy} -verb:sync -source:package="ProjetGPI\\bin\\Debug\\net8.0\\ProjetGPI.zip" -dest:auto -setParam:"IIS Web Application Name"="${env.testAppName}" -skip:objectName=filePath,absolutePath=".\\\\PackageTmp\\\\Web.config$" -enableRule:DoNotDelete -allowUntrusted=true'
+                bat 'C:\\Program Files (x86)\\IIS\\Microsoft Web Deploy V3\\msdeploy.exe -verb:sync -source:package="ProjetGPI\\bin\\Debug\\net8.0\\ProjetGPI.zip" -dest:auto -setParam:"IIS Web Application Name"="${env.testAppName}" -skip:objectName=filePath,absolutePath=".\\\\PackageTmp\\\\Web.config$" -enableRule:DoNotDelete -allowUntrusted=true'
 
                 // Redémarrage de IIS
                 bat 'net start "w3svc"'
