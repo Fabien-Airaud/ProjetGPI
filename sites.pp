@@ -52,7 +52,7 @@ $configurations_iis.each |$site, $config| {
     }
     # Redémarrage du site IIS si des modifications ont été effectuées
     exec { "restart-${site}-site":
-        command     => "iisreset /ap \"${site}\"",
+        command     => "C:\\Windows\\System32\\inetsrv\\appcmd.exe recycle apppool /apppool.name:${config['application_pool']}",
         refreshonly => true,
         subscribe   => Iis_site[$site],
     }
