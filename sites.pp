@@ -60,6 +60,15 @@ $configurations_iis.each |$site, $config| {
     #     unless  => "C:\\Windows\\System32\\inetsrv\\appcmd.exe list apppool | findstr /i ${config['application_pool']}",
     #     require => File[$config['physical_path']], # On attend que le dossier physique soit créé
     # }
+    # Attente de la création du pool d'application
+    exec { "wait-${config['application_pool']}-pool":
+        command   => "C:\\Windows\\System32\\inetsrv\\appcmd.exe list apppool | findstr /i ${config['application_pool']}",
+        path      => 'C:\\Windows\\System32\\inetsrv',
+        tries     => 10,
+        try_sleep => 5,
+        unless    => "C:\\Windows\\System32\\inetsrv\\appcmd.exe list apppool | findstr /i ${config['application_pool']}",
+        require   => File[$config['physical_path']], # On attend que le dossier physique soit créé
+    }
     # Création du site
     iis_site { $site:
         ensure          => 'started',
