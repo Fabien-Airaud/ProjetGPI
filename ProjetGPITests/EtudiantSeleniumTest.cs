@@ -15,10 +15,10 @@ namespace ProjetGPITests
         private static IWebDriver GetDriver()
         {
             //Create instance of ChromeOptions Class
-            ChromeOptions handlingSSL = new();
-            handlingSSL.AddArguments("--allow-insecure-localhost", "--ignore-certificate-errors");
+            ChromeOptions chromeOptions = new();
+            chromeOptions.AddArguments("--allow-insecure-localhost", "--ignore-ssl-errors=yes", "--ignore-certificate-errors");
 
-            return new ChromeDriver(handlingSSL);
+            return new ChromeDriver(chromeOptions);
         }
 
         private static void CheckHeaderBrand(IWebDriver driver)
