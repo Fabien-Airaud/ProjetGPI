@@ -22,7 +22,7 @@ pipeline {
                 dotnetClean configuration: 'Release', project: 'ProjetGPI.sln'
                 // bat 'dotnet clean ProjetGPI.sln --configuration Release'
             }
-        // }
+        }
         
         // // Restauration des dépendances implicite lors de la compilation
         // stage('Build') {
