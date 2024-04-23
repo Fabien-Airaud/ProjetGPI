@@ -11,6 +11,15 @@ namespace ProjetGPITests
         private static readonly string[] indexTableHeaders = ["Nom", "Prénom", "Email", "Sexe", "Date de Naissance", ""];
 
 
+        private static IWebDriver GetDriver()
+        {
+            //Create instance of ChromeOptions Class
+            ChromeOptions handlingSSL = new();
+            handlingSSL.AddArguments("--ignore-certificate-errors");
+
+            return new ChromeDriver(handlingSSL);
+        }
+
         private static void CheckHeaderBrand(IWebDriver driver)
         {
             IWebElement navbarBrand = driver.FindElement(By.CssSelector("header nav p.navbar-brand"));
@@ -50,7 +59,7 @@ namespace ProjetGPITests
         public void IndexEtudiantTest()
         {
             // Arrange
-            var chromeDriver = new ChromeDriver();
+            var chromeDriver = GetDriver();
             chromeDriver.Navigate().GoToUrl(baseUrl);
 
             // Check the header brand
@@ -169,7 +178,7 @@ namespace ProjetGPITests
         public void CancelCreateEtudiantTest()
         {
             // Arrange
-            var chromeDriver = new ChromeDriver();
+            var chromeDriver = GetDriver();
             chromeDriver.Navigate().GoToUrl(baseUrl);
 
             // Get number of rows before not creating a new one
@@ -201,7 +210,7 @@ namespace ProjetGPITests
         public void CreateEtudiantTest()
         {
             // Arrange
-            var chromeDriver = new ChromeDriver();
+            var chromeDriver = GetDriver();
             chromeDriver.Navigate().GoToUrl(baseUrl);
 
             // Get number of rows before creating a new one
@@ -251,7 +260,7 @@ namespace ProjetGPITests
         public void CancelEditEtudiantTest()
         {
             // Arrange
-            var chromeDriver = new ChromeDriver();
+            var chromeDriver = GetDriver();
             chromeDriver.Navigate().GoToUrl(baseUrl);
 
             // Get the first Etudiant row data before editing and get the number of rows
@@ -297,7 +306,7 @@ namespace ProjetGPITests
         public void EditEtudiantTest()
         {
             // Arrange
-            var chromeDriver = new ChromeDriver();
+            var chromeDriver = GetDriver();
             chromeDriver.Navigate().GoToUrl(baseUrl);
 
             // Get the first Etudiant row data before editing and get the number of rows
@@ -375,7 +384,7 @@ namespace ProjetGPITests
         public void DetailsEtudiantTest()
         {
             // Arrange
-            var chromeDriver = new ChromeDriver();
+            var chromeDriver = GetDriver();
             chromeDriver.Navigate().GoToUrl(baseUrl);
 
             // Get the first Etudiant row data before viewing details
@@ -419,7 +428,7 @@ namespace ProjetGPITests
         public void CancelDeleteEtudiantTest()
         {
             // Arrange
-            var chromeDriver = new ChromeDriver();
+            var chromeDriver = GetDriver();
             chromeDriver.Navigate().GoToUrl(baseUrl);
 
             // Get the last Etudiant row data and get the number of rows
@@ -470,7 +479,7 @@ namespace ProjetGPITests
         public void DeleteEtudiantTest()
         {
             // Arrange
-            var chromeDriver = new ChromeDriver();
+            var chromeDriver = GetDriver();
             chromeDriver.Navigate().GoToUrl(baseUrl);
 
             // Get the last Etudiant row data before deleting it and get the number of rows
