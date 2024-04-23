@@ -7,6 +7,12 @@ pipeline {
         testAppSite = 'C:\\inetpub\\wwwroot\\ProjetGPI\\TestApp'
         completeAppSite = 'C:\\inetpub\\wwwroot\\ProjetGPI\\CompleteApp'
     }
+
+    stage('Checkout Git') {
+        steps {
+            git credentialsId: '561f9ea4-610b-4151-9862-9dfe385dcd87', url: 'https://github.com/Fabien-Airaud/ProjetGPI.git', branch: 'master'
+        }
+    }
     
     stages {
         stage('Clean') {
@@ -58,7 +64,10 @@ pipeline {
         stage('Publish to Complete IIS Site') {
             when {
                 allOf {
-                    previousStages().successful()
+                    stage('Build').isSuccessful()
+                    stage('Deploy with Puppet on IIS').isSuccessful()
+                    stage('Publish to Test IIS Site').isSuccessful()
+                    stage('Test').isSuccessful()
                 }
             }
             steps {
@@ -74,34 +83,3 @@ pipeline {
         }
     }
 }
-
-
-
-// pipeline
-// {
-//     agent any
-//     environment {
-//         dotnet = 'C:\\Program Files\\dotnet\\dotnet.exe'
-//     }
-//     stages {
-//         stage('Checkout') {
-//             steps {
-//                 git credentialsId: '561f9ea4-610b-4151-9862-9dfe385dcd87', url: 'https://github.com/Fabien-Airaud/ProjetGPI.git', branch: 'master'
-//             }
-//         }
-        
-//         stage('Build') {
-//             steps {
-//                 bat 'dotnet build ProjetGPI.sln --configuration Release'
-//             }
-//         }
-
-//         stage('Test') {
-//             steps {
-//                 bat 'dotnet test ProjetGPITests\\ProjetGPITests.csproj --logger:trx'
-//             }
-//         }
-//     }
-// }
-
-
