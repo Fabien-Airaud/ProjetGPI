@@ -9,13 +9,6 @@ pipeline {
     }
     
     stages {
-
-        // stage('Checkout Git') {
-        //     steps {
-        //         git credentialsId: '561f9ea4-610b-4151-9862-9dfe385dcd87', url: 'https://github.com/Fabien-Airaud/ProjetGPI.git', branch: 'master'
-        //     }
-        // }
-
         stage('Clean') {
             steps {
                 // Nettoyage de la solution
@@ -57,8 +50,8 @@ pipeline {
         stage('Test') {
             steps {
                 // Exécution des tests unitaires et fonctionnels
-                dotnetTest configuration: 'Release', project: 'ProjetGPITests\\ProjetGPITests.csproj', logger: 'trx', noBuild: true
-                // bat 'dotnet test ProjetGPITests\\ProjetGPITests.csproj --configuration Release --logger:trx --no-build'
+                dotnetTest configuration: 'Release', project: 'ProjetGPITests\\ProjetGPITests.csproj', logger: 'trx', noRestore: true
+                // bat 'dotnet test ProjetGPITests\\ProjetGPITests.csproj --configuration Release --logger:trx --no-restore'
             }
         }
 
