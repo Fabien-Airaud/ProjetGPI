@@ -90,15 +90,15 @@ pipeline {
                 bat 'iisreset /start'
             }
         }
-
-        stage('Final Check') {
-            steps {
-                script {
-                    if (currentBuild.result == 'SUCCESS') {
-                        echo 'Tests and deployment succeeded!'
-                    } else {
-                        error 'Tests or deployment failed!'
-                    }
+    }
+    post {
+        always {
+            script {
+                def allStagesSuccessful = currentBuild.result == 'SUCCESS'
+                if (allStagesSuccessful) {
+                    echo "Toutes les étapes ont réussi et l'appliaction est déployée."
+                } else {
+                    echo "Le déploiement ou les tests ont échoué."
                 }
             }
         }
