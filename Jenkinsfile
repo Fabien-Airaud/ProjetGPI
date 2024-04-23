@@ -63,11 +63,8 @@ pipeline {
 
         stage('Publish to Complete IIS Site') {
             when {
-                allOf {
-                    stage('Build').isSuccessful()
-                    stage('Deploy with Puppet on IIS').isSuccessful()
-                    stage('Publish to Test IIS Site').isSuccessful()
-                    stage('Test').isSuccessful()
+                expression {
+                    currentBuild.result == null || currentBuild.result == 'SUCCESS'
                 }
             }
             steps {
