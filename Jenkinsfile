@@ -37,15 +37,13 @@ pipeline {
         stage('Publish to Test IIS Site') {
             steps {
                 // Arrêter le site de test sur IIS
-                bat 'net stop "w3svc" /y'
-                // bat 'iisreset /stop'
+                bat 'iisreset /stop'
                 
                 // Publier l'application sur le site de test
                 dotnetPublish configuration: 'Release', project: 'ProjetGPI\\ProjetGPI.csproj', outputDirectory: env.testAppSite, noBuild: true
                 
                 // Redémarrer le site de test sur IIS
-                bat 'net start "w3svc"'
-                // bat 'iisreset /start'
+                bat 'iisreset /start'
             }
         }
         
@@ -65,15 +63,13 @@ pipeline {
             }
             steps {
                 // Arrêter le site complet sur IIS
-                bat 'net stop "w3svc" /y'
-                // bat 'iisreset /stop'
+                bat 'iisreset /stop'
                 
                 // Publier l'application sur le site complet
                 dotnetPublish configuration: 'Release', project: 'ProjetGPI\\ProjetGPI.csproj', outputDirectory: env.completeAppSite, noBuild: true
                 
                 // Redémarrer le site complet sur IIS
-                bat 'net start "w3svc"'
-                // bat 'iisreset /start'
+                bat 'iisreset /start'
             }
         }
 
