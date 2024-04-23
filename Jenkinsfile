@@ -1,6 +1,5 @@
 pipeline {
     agent any
-
     environment {
         testAppSite = 'C:\\inetpub\\wwwroot\\ProjetGPI\\TestApp'
         completeAppSite = 'C:\\inetpub\\wwwroot\\ProjetGPI\\CompleteApp'
