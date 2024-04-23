@@ -30,10 +30,10 @@ $configurations_iis.each |$site, $config| {
         ensure  => directory,
     }
     # Création du pool d'application
-    iis_application_pool {$site:
+    iis_application_pool {$config['application_pool']:
         ensure                  => 'present',
         state                   => 'started',
-        managed_runtime_version => 'v4.0',
+        managed_runtime_version => '',
         managed_pipeline_mode   => 'Integrated',
     }
     # Création du site
@@ -47,8 +47,7 @@ $configurations_iis.each |$site, $config| {
                 'bindinginformation' => "*:${config['port']}:",
             },
         ],
-        require         => Iis_application_pool[$site], # On attend que le pool d'application soit créé
-        # require         => Exec["create-${site}-pool"], # On attend que le pool d'application soit créé
+        require         => Iis_application_pool[$config['application_pool']], # On attend que le pool d'application soit créé
     }
     # Redémarrage du site IIS si des modifications ont été effectuées
     exec { "restart-${site}-site":
