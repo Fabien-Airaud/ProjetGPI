@@ -33,7 +33,7 @@ $configurations_iis.each |$site, $config| {
     iis_application_pool {$config['application_pool']:
         ensure                  => 'present',
         state                   => 'started',
-        managed_runtime_version => '',
+        managed_runtime_version => 'v4.0',
         managed_pipeline_mode   => 'Integrated',
     }
     # Création du site
