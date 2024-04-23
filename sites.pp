@@ -71,7 +71,6 @@ $configurations_iis.each |$site, $config| {
                 'bindinginformation' => "*:${config['port']}:",
             },
         ],
-        require         => $config['application_pool'] in iis_application_pool
     }
     # Redémarrage du site IIS si des modifications ont été effectuées
     exec { "restart-${site}-site":
