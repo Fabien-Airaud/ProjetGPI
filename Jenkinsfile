@@ -24,14 +24,14 @@ pipeline {
             }
         }
         
-        // // Restauration des dépendances implicite lors de la compilation
-        // stage('Build') {
-        //     steps {
-        //         // Compilation de la solution
-        //         dotnetBuild configuration: 'Release', project: 'ProjetGPI.sln'
-        //         // bat 'dotnet build ProjetGPI.sln --configuration Release'
-        //     }
-        // }
+        // Restauration des dépendances implicite lors de la compilation
+        stage('Build') {
+            steps {
+                // Compilation de la solution
+                dotnetBuild configuration: 'Release', project: 'ProjetGPI.sln'
+                // bat 'dotnet build ProjetGPI.sln --configuration Release'
+            }
+        }
 
         // stage('Deploy with Puppet on IIS') {
         //     steps {
