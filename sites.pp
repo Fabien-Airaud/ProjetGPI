@@ -31,19 +31,11 @@ $configurations_iis.each |$site, $config| {
     }
     # Création du pool d'application
     iis_application_pool {$site:
-        ensure                    => 'present',
-        state                     => 'started',
-        # enable32_bit_app_on_win64 => true,
-        managed_runtime_version   => 'v4.0',
-        managed_pipeline_mode     => 'Integrated',
+        ensure                  => 'present',
+        state                   => 'started',
+        managed_runtime_version => 'v4.0',
+        managed_pipeline_mode   => 'Integrated',
     }
-    # exec { "create-${site}-pool":
-    #     # On ne recrée pas le pool si il existe déjà
-    #     command  => "C:\\Windows\\System32\\inetsrv\\appcmd.exe add apppool /name:${config['application_pool']}",
-    #     unless   => "C:\\Windows\\System32\\inetsrv\\appcmd.exe list apppool | findstr /i ${config['application_pool']}",
-    #     provider => 'windows',
-    #     require  => File[$config['physical_path']], # On attend que le dossier physique soit créé
-    # }
     # Création du site
     iis_site { $site:
         ensure          => 'started',

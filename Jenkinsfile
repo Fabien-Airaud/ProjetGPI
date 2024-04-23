@@ -41,18 +41,18 @@ pipeline {
             }
         }
         
-        // stage('Publish to Test IIS Site') {
-        //     steps {
-        //         // Arrêter le site de test sur IIS
-        //         bat 'iisreset /stop'
+        stage('Publish to Test IIS Site') {
+            steps {
+                // Arrêter le site de test sur IIS
+                bat 'iisreset /stop'
                 
-        //         // Publier l'application sur le site de test
-        //         dotnetPublish configuration: 'Release', project: 'ProjetGPI\\ProjetGPI.csproj', outputPath: env.testAppSite, noBuild: true
+                // Publier l'application sur le site de test
+                dotnetPublish configuration: 'Release', project: 'ProjetGPI\\ProjetGPI.csproj', outputPath: env.testAppSite, noBuild: true
                 
-        //         // Redémarrer le site de test sur IIS
-        //         bat 'iisreset /start'
-        //     }
-        // }
+                // Redémarrer le site de test sur IIS
+                bat 'iisreset /start'
+            }
+        }
         
         // stage('Test') {
         //     steps {
