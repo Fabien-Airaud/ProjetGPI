@@ -72,5 +72,17 @@ pipeline {
                 bat 'iisreset /start'
             }
         }
+
+        stage('Final Check') {
+            steps {
+                script {
+                    if (currentBuild.result == 'SUCCESS') {
+                        echo 'Tests and deployment succeeded!'
+                    } else {
+                        error 'Tests or deployment failed!'
+                    }
+                }
+            }
+        }
     }
 }
