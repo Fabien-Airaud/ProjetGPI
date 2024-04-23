@@ -36,8 +36,8 @@ pipeline {
         stage('Deploy with Puppet on IIS') {
             steps {
                 // Utilisation de Puppet pour créer les sites sur IIS
-                puppetApply manifest: 'sites.pp'
-                // bat 'puppet apply sites.pp'
+                // puppetApply manifest: 'sites.pp'
+                bat 'puppet apply sites.pp'
             }
         }
         
