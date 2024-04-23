@@ -50,4 +50,10 @@ $configurations_iis.each |$site, $config| {
         require         => Iis_application_pool[$site], # On attend que le pool d'application soit créé
         # require         => Exec["create-${site}-pool"], # On attend que le pool d'application soit créé
     }
+    # Redémarrage du site IIS si des modifications ont été effectuées
+    exec { "restart-${site}-site":
+        command     => "iisreset /ap \"${site}\"",
+        refreshonly => true,
+        subscribe   => Iis_site[$site],
+    }
 }
