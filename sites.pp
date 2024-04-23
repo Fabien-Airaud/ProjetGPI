@@ -32,7 +32,6 @@ $configurations_iis.each |$site, $config| {
     # Création du pool d'application
     iis_application_pool {$config['application_pool']:
         ensure                  => 'present',
-        state                   => 'started',
         managed_runtime_version => 'v4.0',
         managed_pipeline_mode   => 'Integrated',
     }
