@@ -32,9 +32,10 @@ $configurations_iis.each |$site, $config| {
     # Création du pool d'application
     iis_application_pool {$site:
         ensure                    => 'present',
-        enable32_bit_app_on_win64 => true,
-        managed_runtime_version   => '',
-        managed_pipeline_mode     => 'Classic',
+        state                     => 'started',
+        # enable32_bit_app_on_win64 => true,
+        managed_runtime_version   => 'v4.0',
+        managed_pipeline_mode     => 'Integrated',
     }
     # exec { "create-${site}-pool":
     #     # On ne recrée pas le pool si il existe déjà
