@@ -7,6 +7,7 @@ namespace ProjetGPITests
 {
     public class EtudiantSeleniumTest
     {
+        //private static readonly string baseUrl = "https://localhost:7212/"; // For local testing
         private static readonly string baseUrl = "https://localhost:5153/";
         private static readonly string[] indexTableHeaders = ["Nom", "Prénom", "Email", "Sexe", "Date de Naissance", ""];
 
@@ -15,7 +16,7 @@ namespace ProjetGPITests
         {
             //Create instance of ChromeOptions Class
             ChromeOptions handlingSSL = new();
-            handlingSSL.AddArguments("--ignore-certificate-errors");
+            handlingSSL.AddArguments("--allow-insecure-localhost", "--ignore-certificate-errors");
 
             return new ChromeDriver(handlingSSL);
         }
