@@ -54,13 +54,13 @@ pipeline {
             }
         }
         
-        // stage('Test') {
-        //     steps {
-        //         // Exécution des tests unitaires et fonctionnels
-        //         dotnetTest configuration: 'Release', project: 'ProjetGPITests\\ProjetGPITests.csproj', logger: 'trx', noBuild: true
-        //         // bat 'dotnet test ProjetGPITests\\ProjetGPITests.csproj --configuration Release --logger:trx --no-build'
-        //     }
-        // }
+        stage('Test') {
+            steps {
+                // Exécution des tests unitaires et fonctionnels
+                dotnetTest configuration: 'Release', project: 'ProjetGPITests\\ProjetGPITests.csproj', logger: 'trx', noBuild: true
+                // bat 'dotnet test ProjetGPITests\\ProjetGPITests.csproj --configuration Release --logger:trx --no-build'
+            }
+        }
 
         // stage('Publish to Complete IIS Site') {
         //     when {
