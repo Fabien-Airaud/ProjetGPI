@@ -32,37 +32,37 @@ pipeline {
             }
         }
 
-        stage('Release tests') {
-            steps {
-                bat 'dotnet build ProjetGPI.sln /p:PublishProfile="ProjetGPI\\Properties\\PublishProfiles\\ProjetGPIProfile.pubxml" /p:Platform="Any CPU" /p:DeployOnBuild=true /m'
-            }
-        }
-
-        stage('Deploy tests') {
-            steps {
-                // Arrêt de IIS
-                bat 'net stop "w3svc"'
-
-                // Deploiement des paquets sur le site de test IIS
-                bat '"C:\\Program Files (x86)\\IIS\\Microsoft Web Deploy V3\\msdeploy.exe" -verb:sync -source:package="ProjetGPI\\bin\\Debug\\net8.0\\ProjetGPI.zip" -dest:auto -setParam:"IIS Web Application Name"="TestAppSite" -skip:objectName=filePath,absolutePath=".\\\\PackageTmp\\\\Web.config$" -enableRule:DoNotDelete -allowUntrusted=true'
-
-                // Redémarrage de IIS
-                bat 'net start "w3svc"'
-            }
-        }
-        
-        // stage('Publish to Test IIS Site') {
+        // stage('Release tests') {
         //     steps {
-        //         // Arrêter le site de test sur IIS
-        //         bat 'iisreset /stop'
-                
-        //         // Publier l'application sur le site de test
-        //         dotnetPublish configuration: 'Release', project: 'ProjetGPI\\ProjetGPI.csproj', outputDirectory: env.testAppSite, noBuild: true
-                
-        //         // Redémarrer le site de test sur IIS
-        //         bat 'iisreset /start'
+        //         bat 'dotnet build ProjetGPI.sln /p:PublishProfile="ProjetGPI\\Properties\\PublishProfiles\\ProjetGPIProfile.pubxml" /p:Platform="Any CPU" /p:DeployOnBuild=true /m'
         //     }
         // }
+
+        // stage('Deploy tests') {
+        //     steps {
+        //         // Arrêt de IIS
+        //         bat 'net stop "w3svc"'
+
+        //         // Deploiement des paquets sur le site de test IIS
+        //         bat '"C:\\Program Files (x86)\\IIS\\Microsoft Web Deploy V3\\msdeploy.exe" -verb:sync -source:package="ProjetGPI\\bin\\Debug\\net8.0\\ProjetGPI.zip" -dest:auto -setParam:"IIS Web Application Name"="TestAppSite" -skip:objectName=filePath,absolutePath=".\\\\PackageTmp\\\\Web.config$" -enableRule:DoNotDelete -allowUntrusted=true'
+
+        //         // Redémarrage de IIS
+        //         bat 'net start "w3svc"'
+        //     }
+        // }
+        
+        stage('Publish to Test IIS Site') {
+            steps {
+                // Arrêter le site de test sur IIS
+                bat 'iisreset /stop'
+                
+                // Publier l'application sur le site de test
+                dotnetPublish configuration: 'Release', project: 'ProjetGPI\\ProjetGPI.csproj', outputDirectory: env.testAppSite, noBuild: true
+                
+                // Redémarrer le site de test sur IIS
+                bat 'iisreset /start'
+            }
+        }
         
         stage('Test') {
             steps {
