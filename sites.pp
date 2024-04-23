@@ -49,7 +49,6 @@ $configurations_iis.each |$site, $config| {
         ensure          => 'started',
         physicalpath    => $config['physical_path'],
         applicationpool => $config['application_pool'],
-        provider        => 'windows',
         bindings        => [
             {
                 'protocol'           => 'http',
