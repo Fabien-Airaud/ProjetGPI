@@ -32,6 +32,7 @@ pipeline {
             }
         }
 
+        // Même erreur qu'avec dotnetPublish lors des tests
         // stage('Release tests') {
         //     steps {
         //         bat 'dotnet build ProjetGPI.sln /p:PublishProfile="ProjetGPI\\Properties\\PublishProfiles\\ProjetGPIProfile.pubxml" /p:Platform="Any CPU" /p:DeployOnBuild=true /m'
