@@ -47,7 +47,7 @@ pipeline {
                 bat 'iisreset /stop'
                 
                 // Publier l'application sur le site de test
-                dotnetPublish configuration: 'Release', project: 'ProjetGPI\\ProjetGPI.csproj', outputPath: env.testAppSite, noBuild: true
+                dotnetPublish configuration: 'Release', project: 'ProjetGPI\\ProjetGPI.csproj', outputDirectory: env.testAppSite, noBuild: true
                 
                 // Redémarrer le site de test sur IIS
                 bat 'iisreset /start'
@@ -73,7 +73,7 @@ pipeline {
         //         bat 'iisreset /stop'
                 
         //         // Publier l'application sur le site complet
-        //         dotnetPublish configuration: 'Release', project: 'ProjetGPI\\ProjetGPI.csproj', outputPath: env.completeAppSite, noBuild: true
+        //         dotnetPublish configuration: 'Release', project: 'ProjetGPI\\ProjetGPI.csproj', outputDirectory: env.completeAppSite, noBuild: true
                 
         //         // Redémarrer le site complet sur IIS
         //         bat 'iisreset /start'

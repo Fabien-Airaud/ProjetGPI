@@ -50,13 +50,4 @@ $configurations_iis.each |$site, $config| {
         require         => Iis_application_pool[$site], # On attend que le pool d'application soit créé
         # require         => Exec["create-${site}-pool"], # On attend que le pool d'application soit créé
     }
-    # Redémarrage du site pour prendre en compte les changements
-    exec { "restart-${site}-site":
-        command     => "C:\\Windows\\System32\\inetsrv\\appcmd.exe recycle apppool /apppool.name:${config['application_pool']}",
-        refreshonly => true,
-        provider    => 'windows',
-        subscribe   => Iis_site[$site],
-    }
 }
-
-
