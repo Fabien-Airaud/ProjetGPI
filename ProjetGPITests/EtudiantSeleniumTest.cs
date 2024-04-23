@@ -7,7 +7,7 @@ namespace ProjetGPITests
 {
     public class EtudiantSeleniumTest
     {
-        private static readonly string baseUrl = "https://localhost:7212/";
+        private static readonly string baseUrl = "https://localhost:5153/";
         private static readonly string[] indexTableHeaders = ["Nom", "Prénom", "Email", "Sexe", "Date de Naissance", ""];
 
 
